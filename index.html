@@ -373,7 +373,7 @@
 
   <div class="info-box">
     <h2><i class="fas fa-info-circle"></i> Informativo</h2>
-    <p>Cada dia aceita apenas 1 atendimento. Dias com <i class="fas fa-lock"></i> já foram reservados.</p>
+    <p>Cada dia aceita apenas 1 atendimento. Os domingos e dias com <i class="fas fa-lock"></i> já estão indisponíveis.</p>
   </div>
 
   <form id="atendimentoForm" class="form-card" novalidate>
@@ -396,7 +396,7 @@
       </div>
       <div class="legenda">
         <span class="l-livre">Disponível</span>
-        <span class="l-ocupado">Reservado</span>
+        <span class="l-ocupado">Reservado / Domingo</span>
         <span class="l-sel">Sua escolha</span>
       </div>
       <div class="escolhida" id="escolhida" aria-live="polite"></div>
@@ -470,15 +470,20 @@
       const k = iso(d);
       const passado = d < hoje;
       const ocupado = ocupadas.has(k);
+      const ehDomingo = d.getDay() === 0; // Verifica se é domingo
+      
       let cls = "cal-day";
       if (d.getTime() === hoje.getTime()) cls += " hoje";
       if (passado) cls += " passado";
-      else if (ocupado) cls += " ocupado";
+      else if (ehDomingo || ocupado) cls += " ocupado"; // Aplica estilo visual indisponível para domingos e ocupados
+      
       if (k === selecionada) cls += " selecionado";
-      const bloqueado = passado || ocupado;
+      
+      const bloqueado = passado || ocupado || ehDomingo; // Bloqueia dias passados, ocupados e domingos
+      
       html += `<button type="button" class="${cls}" data-dia="${k}" ${bloqueado ? "disabled" : ""}
-        aria-label="${dia} de ${MESES[mes]}${ocupado ? ", reservado" : ""}">
-        ${dia}${ocupado && !passado ? '<i class="fas fa-lock"></i>' : ""}</button>`;
+        aria-label="${dia} de ${MESES[mes]}${ehDomingo ? ", domingo" : (ocupado ? ", reservado" : "")}">
+        ${dia}${ehDomingo ? '<i class="fas fa-ban"></i>' : (ocupado && !passado ? '<i class="fas fa-lock"></i>' : "")}</button>`;
     }
     html += `</div>`;
 
@@ -510,7 +515,7 @@
       mostrarAviso("Não foi possível carregar as datas reservadas. Recarregue a página.");
     }
     
-    if (selecionada && ocupadas.has(selecionada)) {
+    if (selecionada && (ocupadas.has(selecionada) || new Date(selecionada + 'T00:00:00').getDay() === 0)) {
       selecionada = "";
       document.getElementById("data").value = "";
       document.getElementById("escolhida").textContent = "";
