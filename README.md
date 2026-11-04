@@ -65,16 +65,12 @@ As datas das colunas C e D são gravadas como texto, no formato `dd/mm/aaaa`.
 
 Abra o `index.html` e troque a URL na constante `SCRIPT_URL`:
 
-```javascript
-const SCRIPT_URL = "https://luccasfsilva.github.io/form_de_atendimento/";
-```
-
 ### 4. Publicação com GitHub Pages
 
 1. Envie os arquivos para o repositório.
 2. Vá em **Settings > Pages**.
 3. Em **Source**, escolha a branch `main` e a pasta `/ (root)`.
-4. Salve. O link do formulário aparece em instantes, no formato `https://SEU-USUARIO.github.io/form_de_atendimento/`.
+4. Salve. O link do formulário aparece em instantes, no formato  (https://luccasfsilva.github.io/form_de_atendimento/).
 
 ## Como usar
 
