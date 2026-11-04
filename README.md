@@ -66,7 +66,7 @@ As datas das colunas C e D são gravadas como texto, no formato `dd/mm/aaaa`.
 Abra o `index.html` e troque a URL na constante `SCRIPT_URL`:
 
 ```javascript
-const SCRIPT_URL = "https://script.google.com/macros/s/SEU_CODIGO_AQUI/exec";
+const SCRIPT_URL = "https://luccasfsilva.github.io/form_de_atendimento/";
 ```
 
 ### 4. Publicação com GitHub Pages
