@@ -1,73 +1,368 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atendimento</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Roboto',sans-serif; background:linear-gradient(135deg,#e3f6f4,#f8f9fa); color:#333; line-height:1.6; padding:20px; min-height:100vh; }
-.container { max-width:700px; margin:0 auto; padding:0 15px; }
-header { background:linear-gradient(to right,#2a3990,#2bbfb1); color:#fff; padding:25px 0; text-align:center; border-radius:10px 10px 0 0; margin-bottom:5px; box-shadow:0 4px 15px rgba(0,0,0,.1); }
-header h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
-header p { font-size:18px; opacity:.9; }
-.info-box { background:#e4f6f4; border-left:4px solid #2bbfb1; padding:15px; margin:20px 0; border-radius:0 5px 5px 0; }
-.info-box h2 { color:#2a3990; font-size:20px; margin-bottom:8px; }
-.form-card { background:#fff; border-radius:10px; padding:30px; box-shadow:0 5px 20px rgba(0,0,0,.1); margin-bottom:30px; }
-.form-card h2 { color:#2a3990; font-size:24px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #e4f6f4; }
-.form-group { margin-bottom:18px; }
-.form-group label { display:block; font-weight:500; margin-bottom:8px; }
-input[type="text"], input[type="tel"], input[type="date"] { width:100%; padding:12px 15px; border:1px solid #ddd; border-radius:8px; font-size:16px; background:#f9f9f9; transition:all .3s; }
-input[type="date"] { -webkit-appearance:none; appearance:none; min-height:48px; font-family:inherit; color:#333; text-align:left; display:block; }
-input[type="date"]::-webkit-date-and-time-value { text-align:left; }
-input[type="date"]::-webkit-calendar-picker-indicator { cursor:pointer; opacity:.6; }
-input:focus { outline:none; border-color:#2bbfb1; box-shadow:0 0 0 3px rgba(43,191,177,.2); background:#fff; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atendimento</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
 
-fieldset { border:1px solid #e0e0e0; border-radius:10px; padding:20px; margin:25px 0; }
-legend { font-size:18px; font-weight:600; color:#2a3990; padding:0 15px; background:#e4f6f4; border-radius:20px; }
+    body { 
+      font-family: 'Roboto', sans-serif; 
+      background: linear-gradient(135deg, #e3f6f4, #f8f9fa); 
+      color: #333; 
+      line-height: 1.6; 
+      padding: 20px; 
+      min-height: 100vh; 
+    }
 
-/* Calendário */
-.cal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.cal-head strong { font-size:18px; color:#2a3990; text-transform:capitalize; }
-.cal-nav { background:#e4f6f4; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; color:#2a3990; font-size:16px; }
-.cal-nav:hover:not(:disabled) { background:#c5ece8; }
-.cal-nav:disabled { opacity:.4; cursor:not-allowed; }
-.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-.cal-dow { text-align:center; font-size:13px; font-weight:500; color:#666; padding:4px 0; }
-.cal-day { aspect-ratio:1; border:1px solid #e0e0e0; background:#f9f9f9; border-radius:8px; font-size:16px; font-family:inherit; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; transition:all .2s; }
-.cal-day:hover:not(:disabled) { background:#e4f6f4; border-color:#2bbfb1; }
-.cal-day.hoje { border-color:#2a3990; font-weight:700; }
-.cal-day.selecionado { background:linear-gradient(135deg,#2a3990,#2bbfb1); color:#fff; border-color:transparent; font-weight:700; }
-.cal-day:disabled { cursor:not-allowed; }
-.cal-day.passado { background:transparent; color:#bbb; border-color:transparent; }
-.cal-day.ocupado { background:#fdecea; color:#b71c1c; border-color:#f5c6cb; }
-.cal-day.ocupado i { font-size:11px; }
-.cal-vazio { visibility:hidden; }
-.legenda { display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:14px; color:#555; }
-.legenda span::before { content:""; display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
-.l-livre::before { background:#f9f9f9; border:1px solid #ccc; }
-.l-ocupado::before { background:#fdecea; border:1px solid #f5c6cb; }
-.l-sel::before { background:#2a3990; }
-.escolhida { margin-top:14px; font-weight:500; color:#2a3990; min-height:24px; }
-.carregando { text-align:center; padding:30px; color:#666; }
+    .container { 
+      max-width: 700px; 
+      margin: 0 auto; 
+      padding: 0 15px; 
+    }
 
-.btn-submit { background:linear-gradient(to right,#2a3990,#2bbfb1); color:#fff; border:none; padding:15px 35px; font-size:18px; font-weight:600; border-radius:50px; cursor:pointer; transition:all .3s; display:block; margin:25px auto 10px; width:250px; box-shadow:0 4px 15px rgba(42,57,144,.3); }
-.btn-submit:hover:not(:disabled) { transform:translateY(-3px); }
-.btn-submit:disabled { opacity:.6; cursor:wait; }
-.aviso { display:none; margin-top:16px; padding:12px 15px; border-radius:8px; border:1px solid #d9534f; color:#b71c1c; background:#fdecea; }
-.aviso.ativo { display:block; }
-.sucesso { text-align:center; padding:20px; }
-.sucesso i { font-size:48px; color:#2e9e5b; margin-bottom:10px; }
-footer { background:linear-gradient(to right,#2a3990,#2bbfb1); color:#fff; text-align:center; padding:20px 0; font-size:15px; margin-top:30px; border-radius:0 0 10px 10px; }
-@media (max-width:768px) {
-  .form-card { padding:20px; }
-  header h1 { font-size:24px; }
-  .btn-submit { width:100%; max-width:300px; }
-  .cal-grid { gap:4px; }
-}
-</style>
+    header { 
+      background: linear-gradient(to right, #2a3990, #2bbfb1); 
+      color: #fff; 
+      padding: 25px 0; 
+      text-align: center; 
+      border-radius: 10px 10px 0 0; 
+      margin-bottom: 5px; 
+      box-shadow: 0 4px 15px rgba(0, 0, 0, .1); 
+    }
+
+    header h1 { 
+      font-size: 28px; 
+      font-weight: 700; 
+      margin-bottom: 8px; 
+    }
+
+    header p { 
+      font-size: 18px; 
+      opacity: .9; 
+    }
+
+    .info-box { 
+      background: #e4f6f4; 
+      border-left: 4px solid #2bbfb1; 
+      padding: 15px; 
+      margin: 20px 0; 
+      border-radius: 0 5px 5px 0; 
+    }
+
+    .info-box h2 { 
+      color: #2a3990; 
+      font-size: 20px; 
+      margin-bottom: 8px; 
+    }
+
+    .form-card { 
+      background: #fff; 
+      border-radius: 10px; 
+      padding: 30px; 
+      box-shadow: 0 5px 20px rgba(0, 0, 0, .1); 
+      margin-bottom: 30px; 
+    }
+
+    .form-card h2 { 
+      color: #2a3990; 
+      font-size: 24px; 
+      margin-bottom: 20px; 
+      padding-bottom: 12px; 
+      border-bottom: 2px solid #e4f6f4; 
+    }
+
+    .form-group { 
+      margin-bottom: 18px; 
+    }
+
+    .form-group label { 
+      display: block; 
+      font-weight: 500; 
+      margin-bottom: 8px; 
+    }
+
+    input[type="text"], 
+    input[type="tel"], 
+    input[type="date"] { 
+      width: 100%; 
+      padding: 12px 15px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-size: 16px; 
+      background: #f9f9f9; 
+      transition: all .3s; 
+    }
+
+    input[type="date"] { 
+      -webkit-appearance: none; 
+      appearance: none; 
+      min-height: 48px; 
+      font-family: inherit; 
+      color: #333; 
+      text-align: left; 
+      display: block; 
+    }
+
+    input[type="date"]::-webkit-date-and-time-value { 
+      text-align: left; 
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator { 
+      cursor: pointer; 
+      opacity: .6; 
+    }
+
+    input:focus { 
+      outline: none; 
+      border-color: #2bbfb1; 
+      box-shadow: 0 0 0 3px rgba(43, 191, 177, .2); 
+      background: #fff; 
+    }
+
+    fieldset { 
+      border: 1px solid #e0e0e0; 
+      border-radius: 10px; 
+      padding: 20px; 
+      margin: 25px 0; 
+    }
+
+    legend { 
+      font-size: 18px; 
+      font-weight: 600; 
+      color: #2a3990; 
+      padding: 0 15px; 
+      background: #e4f6f4; 
+      border-radius: 20px; 
+    }
+
+    /* Calendário */
+    .cal-head { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      margin-bottom: 12px; 
+    }
+
+    .cal-head strong { 
+      font-size: 18px; 
+      color: #2a3990; 
+      text-transform: capitalize; 
+    }
+
+    .cal-nav { 
+      background: #e4f6f4; 
+      border: none; 
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%; 
+      cursor: pointer; 
+      color: #2a3990; 
+      font-size: 16px; 
+    }
+
+    .cal-nav:hover:not(:disabled) { 
+      background: #c5ece8; 
+    }
+
+    .cal-nav:disabled { 
+      opacity: .4; 
+      cursor: not-allowed; 
+    }
+
+    .cal-grid { 
+      display: grid; 
+      grid-template-columns: repeat(7, 1fr); 
+      gap: 6px; 
+    }
+
+    .cal-dow { 
+      text-align: center; 
+      font-size: 13px; 
+      font-weight: 500; 
+      color: #666; 
+      padding: 4px 0; 
+    }
+
+    .cal-day { 
+      aspect-ratio: 1; 
+      border: 1px solid #e0e0e0; 
+      background: #f9f9f9; 
+      border-radius: 8px; 
+      font-size: 16px; 
+      font-family: inherit; 
+      cursor: pointer; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 2px; 
+      transition: all .2s; 
+    }
+
+    .cal-day:hover:not(:disabled) { 
+      background: #e4f6f4; 
+      border-color: #2bbfb1; 
+    }
+
+    .cal-day.hoje { 
+      border-color: #2a3990; 
+      font-weight: 700; 
+    }
+
+    .cal-day.selecionado { 
+      background: linear-gradient(135deg, #2a3990, #2bbfb1); 
+      color: #fff; 
+      border-color: transparent; 
+      font-weight: 700; 
+    }
+
+    .cal-day:disabled { 
+      cursor: not-allowed; 
+    }
+
+    .cal-day.passado { 
+      background: transparent; 
+      color: #bbb; 
+      border-color: transparent; 
+    }
+
+    .cal-day.ocupado { 
+      background: #fdecea; 
+      color: #b71c1c; 
+      border-color: #f5c6cb; 
+    }
+
+    .cal-day.ocupado i { 
+      font-size: 11px; 
+    }
+
+    .cal-vazio { 
+      visibility: hidden; 
+    }
+
+    .legenda { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 16px; 
+      margin-top: 14px; 
+      font-size: 14px; 
+      color: #555; 
+    }
+
+    .legenda span::before { 
+      content: ""; 
+      display: inline-block; 
+      width: 12px; 
+      height: 12px; 
+      border-radius: 3px; 
+      margin-right: 6px; 
+      vertical-align: -1px; 
+    }
+
+    .l-livre::before { 
+      background: #f9f9f9; 
+      border: 1px solid #ccc; 
+    }
+
+    .l-ocupado::before { 
+      background: #fdecea; 
+      border: 1px solid #f5c6cb; 
+    }
+
+    .l-sel::before { 
+      background: #2a3990; 
+    }
+
+    .escolhida { 
+      margin-top: 14px; 
+      font-weight: 500; 
+      color: #2a3990; 
+      min-height: 24px; 
+    }
+
+    .carregando { 
+      text-align: center; 
+      padding: 30px; 
+      color: #666; 
+    }
+
+    .btn-submit { 
+      background: linear-gradient(to right, #2a3990, #2bbfb1); 
+      color: #fff; 
+      border: none; 
+      padding: 15px 35px; 
+      font-size: 18px; 
+      font-weight: 600; 
+      border-radius: 50px; 
+      cursor: pointer; 
+      transition: all .3s; 
+      display: block; 
+      margin: 25px auto 10px; 
+      width: 250px; 
+      box-shadow: 0 4px 15px rgba(42, 57, 144, .3); 
+    }
+
+    .btn-submit:hover:not(:disabled) { 
+      transform: translateY(-3px); 
+    }
+
+    .btn-submit:disabled { 
+      opacity: .6; 
+      cursor: wait; 
+    }
+
+    .aviso { 
+      display: none; 
+      margin-top: 16px; 
+      padding: 12px 15px; 
+      border-radius: 8px; 
+      border: 1px solid #d9534f; 
+      color: #b71c1c; 
+      background: #fdecea; 
+    }
+
+    .aviso.ativo { 
+      display: block; 
+    }
+
+    .sucesso { 
+      text-align: center; 
+      padding: 20px; 
+    }
+
+    .sucesso i { 
+      font-size: 48px; 
+      color: #2e9e5b; 
+      margin-bottom: 10px; 
+    }
+
+    footer { 
+      background: linear-gradient(to right, #2a3990, #2bbfb1); 
+      color: #fff; 
+      text-align: center; 
+      padding: 20px 0; 
+      font-size: 15px; 
+      margin-top: 30px; 
+      border-radius: 0 0 10px 10px; 
+    }
+
+    @media (max-width: 768px) {
+      .form-card { padding: 20px; }
+      header h1 { font-size: 24px; }
+      .btn-submit { width: 100%; max-width: 300px; }
+      .cal-grid { gap: 4px; }
+    }
+  </style>
 </head>
 <body>
 <div class="container">
@@ -88,14 +383,17 @@ footer { background:linear-gradient(to right,#2a3990,#2bbfb1); color:#fff; text-
       <label for="nome">Nome</label>
       <input type="text" id="nome" name="nome" required autocomplete="name">
     </div>
+    
     <div class="form-group">
       <label for="nascimento">Data de nascimento</label>
-      <input type="date" id="nascimento" name="nascimento" required autocomplete="bday" min="1900-01-01">
+      <input type="text" id="nascimento" name="nascimento" required autocomplete="bday" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10">
     </div>
 
     <fieldset>
       <legend><i class="fas fa-calendar-days"></i> Dia do atendimento</legend>
-      <div id="calendario"><div class="carregando"><i class="fas fa-spinner fa-spin"></i> Carregando datas...</div></div>
+      <div id="calendario">
+        <div class="carregando"><i class="fas fa-spinner fa-spin"></i> Carregando datas...</div>
+      </div>
       <div class="legenda">
         <span class="l-livre">Disponível</span>
         <span class="l-ocupado">Reservado</span>
@@ -107,163 +405,187 @@ footer { background:linear-gradient(to right,#2a3990,#2bbfb1); color:#fff; text-
     <input type="hidden" id="data" name="data">
     <div class="aviso" id="aviso" role="alert"></div>
 
-    <button type="submit" class="btn-submit" id="btnEnviar"><i class="fas fa-check-circle"></i> Agendar</button>
+    <button type="submit" class="btn-submit" id="btnEnviar">
+      <i class="fas fa-check-circle"></i> Agendar
+    </button>
   </form>
 
-  <footer> <p>© 2026 - Atendimento. Todos os direitos reservados. | Desenvolvido por Lucas Fernandes</p>
-</footer>
+  <footer>
+    <p>© 2026 - Atendimento. Todos os direitos reservados. | Desenvolvido por Lucas Fernandes</p>
+  </footer>
 </div>
 
 <script>
-// ⚠️ Cole aqui a URL da implantação do Apps Script (veja o arquivo apps-script.gs )
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5meEXa77MkVTBKbYvz5z2y-DvPE7zdmYSWFXd69G69SyB0loteE1FB-QyRg8QSnQ-JA/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5meEXa77MkVTBKbYvz5z2y-DvPE7zdmYSWFXd69G69SyB0loteE1FB-QyRg8QSnQ-JA/exec";
 
-const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
-const DIAS = ["D","S","T","Q","Q","S","S"];
+  const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  const DIAS = ["D", "S", "T", "Q", "Q", "S", "S"];
 
-let ocupadas = new Set();
-let selecionada = "";
-const hoje = new Date(); hoje.setHours(0,0,0,0);
-let mesAtual = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  let ocupadas = new Set();
+  let selecionada = "";
+  const hoje = new Date(); 
+  hoje.setHours(0, 0, 0, 0);
+  let mesAtual = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
 
-const iso = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-// Aceita AAAA-MM-DD, dd/mm/aaaa ou data completa e devolve AAAA-MM-DD
-function normalizarData(v) {
-  const t = String(v).trim();
-  if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t;
-  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(t);
-  if (m) return `${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`;
-  const d = new Date(t);
-  return isNaN(d) ? "" : iso(d);
-}
-const br = (s) => { const [a,m,d] = s.split("-"); return `${d}/${m}/${a}`; };
-
-function mostrarAviso(msg) {
-  const el = document.getElementById("aviso");
-  el.textContent = msg;
-  el.classList.toggle("ativo", !!msg);
-}
-
-function renderCalendario() {
-  const ano = mesAtual.getFullYear(), mes = mesAtual.getMonth();
-  const primeiro = new Date(ano, mes, 1).getDay();
-  const total = new Date(ano, mes + 1, 0).getDate();
-  const noMesAtual = ano === hoje.getFullYear() && mes === hoje.getMonth();
-
-  let html = `
-    <div class="cal-head">
-      <button type="button" class="cal-nav" id="prev" aria-label="Mês anterior" ${noMesAtual ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>
-      <strong>${MESES[mes]} de ${ano}</strong>
-      <button type="button" class="cal-nav" id="next" aria-label="Próximo mês"><i class="fas fa-chevron-right"></i></button>
-    </div>
-    <div class="cal-grid">` + DIAS.map(d => `<div class="cal-dow">${d}</div>`).join("");
-
-  for (let i = 0; i < primeiro; i++) html += `<div class="cal-vazio"></div>`;
-
-  for (let dia = 1; dia <= total; dia++) {
-    const d = new Date(ano, mes, dia);
-    const k = iso(d);
-    const passado = d < hoje;
-    const ocupado = ocupadas.has(k);
-    let cls = "cal-day";
-    if (d.getTime() === hoje.getTime()) cls += " hoje";
-    if (passado) cls += " passado";
-    else if (ocupado) cls += " ocupado";
-    if (k === selecionada) cls += " selecionado";
-    const bloqueado = passado || ocupado;
-    html += `<button type="button" class="${cls}" data-dia="${k}" ${bloqueado ? "disabled" : ""}
-      aria-label="${dia} de ${MESES[mes]}${ocupado ? ", reservado" : ""}">
-      ${dia}${ocupado && !passado ? '<i class="fas fa-lock"></i>' : ""}</button>`;
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  
+  function normalizarData(v) {
+    const t = String(v).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t;
+    const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(t);
+    if (m) return `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+    const d = new Date(t);
+    return isNaN(d) ? "" : iso(d);
   }
-  html += `</div>`;
 
-  const cal = document.getElementById("calendario");
-  cal.innerHTML = html;
+  const br = (s) => { 
+    const [a, m, d] = s.split("-"); 
+    return `${d}/${m}/${a}`; 
+  };
 
-  cal.querySelector("#prev").onclick = () => { mesAtual = new Date(ano, mes - 1, 1); renderCalendario(); };
-  cal.querySelector("#next").onclick = () => { mesAtual = new Date(ano, mes + 1, 1); renderCalendario(); };
-  cal.querySelectorAll(".cal-day:not(:disabled)").forEach(b => {
-    b.onclick = () => selecionar(b.dataset.dia);
-  });
-}
-
-function selecionar(k) {
-  selecionada = k;
-  document.getElementById("data").value = k;
-  document.getElementById("escolhida").textContent = "Dia escolhido: " + br(k);
-  mostrarAviso("");
-  renderCalendario();
-}
-
-async function carregarDatas() {
-  try {
-    const r = await fetch(SCRIPT_URL + "?t=" + Date.now());
-    const j = await r.json();
-    ocupadas = new Set((j.datas || []).map(normalizarData).filter(Boolean));
-  } catch (e) {
-    console.error(e);
-    mostrarAviso("Não foi possível carregar as datas reservadas. Recarregue a página.");
+  function mostrarAviso(msg) {
+    const el = document.getElementById("aviso");
+    el.textContent = msg;
+    el.classList.toggle("ativo", !!msg);
   }
-  // se o dia escolhido foi tomado por outra pessoa, limpa a escolha
-  if (selecionada && ocupadas.has(selecionada)) {
-    selecionada = "";
-    document.getElementById("data").value = "";
-    document.getElementById("escolhida").textContent = "";
-  }
-  renderCalendario();
-}
 
-document.getElementById("atendimentoForm").addEventListener("submit", async (ev) => {
-  ev.preventDefault();
-  const form = ev.target;
-  const nome = form.nome.value.trim();
-  const nascimento = form.nascimento.value;
+  function renderCalendario() {
+    const ano = mesAtual.getFullYear(), mes = mesAtual.getMonth();
+    const primeiro = new Date(ano, mes, 1).getDay();
+    const total = new Date(ano, mes + 1, 0).getDate();
+    const noMesAtual = ano === hoje.getFullYear() && mes === hoje.getMonth();
 
-  if (!nome || !nascimento) return mostrarAviso("Preencha o nome e a data de nascimento.");
-  if (nascimento > iso(hoje)) return mostrarAviso("A data de nascimento não pode ser no futuro.");
-  if (!selecionada) return mostrarAviso("Selecione um dia no calendário.");
+    let html = `
+      <div class="cal-head">
+        <button type="button" class="cal-nav" id="prev" aria-label="Mês anterior" ${noMesAtual ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>
+        <strong>${MESES[mes]} de ${ano}</strong>
+        <button type="button" class="cal-nav" id="next" aria-label="Próximo mês"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      <div class="cal-grid">` + DIAS.map(d => `<div class="cal-dow">${d}</div>`).join("");
 
-  const btn = document.getElementById("btnEnviar");
-  btn.disabled = true;
-  mostrarAviso("");
+    for (let i = 0; i < primeiro; i++) html += `<div class="cal-vazio"></div>`;
 
-  try {
-    const r = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ nome, nascimento, data: selecionada })
+    for (let dia = 1; dia <= total; dia++) {
+      const d = new Date(ano, mes, dia);
+      const k = iso(d);
+      const passado = d < hoje;
+      const ocupado = ocupadas.has(k);
+      let cls = "cal-day";
+      if (d.getTime() === hoje.getTime()) cls += " hoje";
+      if (passado) cls += " passado";
+      else if (ocupado) cls += " ocupado";
+      if (k === selecionada) cls += " selecionado";
+      const bloqueado = passado || ocupado;
+      html += `<button type="button" class="${cls}" data-dia="${k}" ${bloqueado ? "disabled" : ""}
+        aria-label="${dia} de ${MESES[mes]}${ocupado ? ", reservado" : ""}">
+        ${dia}${ocupado && !passado ? '<i class="fas fa-lock"></i>' : ""}</button>`;
+    }
+    html += `</div>`;
+
+    const cal = document.getElementById("calendario");
+    cal.innerHTML = html;
+
+    cal.querySelector("#prev").onclick = () => { mesAtual = new Date(ano, mes - 1, 1); renderCalendario(); };
+    cal.querySelector("#next").onclick = () => { mesAtual = new Date(ano, mes + 1, 1); renderCalendario(); };
+    cal.querySelectorAll(".cal-day:not(:disabled)").forEach(b => {
+      b.onclick = () => selecionar(b.dataset.dia);
     });
-    const j = await r.json();
-
-    if (j.ok) {
-      document.querySelector(".container").innerHTML = `
-        <div class="form-card sucesso">
-          <i class="fas fa-circle-check"></i>
-          <h2>Atendimento agendado!</h2>
-          <p>Dia reservado: <strong>${br(selecionada)}</strong></p>
-          <button class="btn-submit" onclick="location.reload()">Voltar</button>
-        </div>`;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-
-    if (j.erro === "ocupado") {
-      mostrarAviso("Este dia acabou de ser reservado por outra pessoa. Escolha outro dia.");
-      await carregarDatas();
-    } else {
-      mostrarAviso("Não foi possível agendar. Tente novamente.");
-    }
-  } catch (e) {
-    console.error(e);
-    mostrarAviso("Erro ao enviar. Verifique sua conexão e tente novamente.");
-  } finally {
-    btn.disabled = false;
   }
-});
 
-document.getElementById("nascimento").max = iso(hoje);
-renderCalendario();
-carregarDatas();
+  function selecionar(k) {
+    selecionada = k;
+    document.getElementById("data").value = k;
+    document.getElementById("escolhida").textContent = "Dia escolhido: " + br(k);
+    mostrarAviso("");
+    renderCalendario();
+  }
+
+  async function carregarDatas() {
+    try {
+      const r = await fetch(SCRIPT_URL + "?t=" + Date.now());
+      const j = await r.json();
+      ocupadas = new Set((j.datas || []).map(normalizarData).filter(Boolean));
+    } catch (e) {
+      console.error(e);
+      mostrarAviso("Não foi possível carregar as datas reservadas. Recarregue a página.");
+    }
+    
+    if (selecionada && ocupadas.has(selecionada)) {
+      selecionada = "";
+      document.getElementById("data").value = "";
+      document.getElementById("escolhida").textContent = "";
+    }
+    renderCalendario();
+  }
+
+  document.getElementById("atendimentoForm").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const form = ev.target;
+    const nome = form.nome.value.trim();
+    const nascimento = nascParaISO(form.nascimento.value);
+
+    if (!nome) return mostrarAviso("Preencha o nome.");
+    if (!nascimento) return mostrarAviso("Informe uma data de nascimento válida (dd/mm/aaaa).");
+    if (!selecionada) return mostrarAviso("Selecione um dia no calendário.");
+
+    const btn = document.getElementById("btnEnviar");
+    btn.disabled = true;
+    mostrarAviso("");
+
+    try {
+      const r = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ nome, nascimento, data: selecionada })
+      });
+      const j = await r.json();
+
+      if (j.ok) {
+        document.querySelector(".container").innerHTML = `
+          <div class="form-card sucesso">
+            <i class="fas fa-circle-check"></i>
+            <h2>Atendimento agendado!</h2>
+            <p>Dia reservado: <strong>${br(selecionada)}</strong></p>
+            <button class="btn-submit" onclick="location.reload()">Voltar</button>
+          </div>`;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      if (j.erro === "ocupado") {
+        mostrarAviso("Este dia acabou de ser reservado por outra pessoa. Escolha outro dia.");
+        await carregarDatas();
+      } else {
+        mostrarAviso("Não foi possível agendar. Tente novamente.");
+      }
+    } catch (e) {
+      console.error(e);
+      mostrarAviso("Erro ao enviar. Verifique sua conexão e tente novamente.");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById("nascimento").addEventListener("input", (e) => {
+    const n = e.target.value.replace(/\D/g, "").slice(0, 8);
+    let v = n;
+    if (n.length > 4) v = n.slice(0, 2) + "/" + n.slice(2, 4) + "/" + n.slice(4);
+    else if (n.length > 2) v = n.slice(0, 2) + "/" + n.slice(2);
+    e.target.value = v;
+  });
+
+  function nascParaISO(txt) {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(txt.trim());
+    if (!m) return "";
+    const d = +m[1], mes = +m[2], a = +m[3];
+    const dt = new Date(a, mes - 1, d);
+    if (dt.getFullYear() !== a || dt.getMonth() !== mes - 1 || dt.getDate() !== d) return "";
+    if (a < 1900 || dt > hoje) return "";
+    return `${a}-${String(mes).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+  }
+
+  renderCalendario();
+  carregarDatas();
 </script>
 </body>
 </html>
