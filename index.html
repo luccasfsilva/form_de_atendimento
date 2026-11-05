@@ -20,20 +20,20 @@
       background: linear-gradient(135deg, #e3f6f4, #f8f9fa); 
       color: #333; 
       line-height: 1.6; 
-      padding: 20px; 
+      padding: 20px 10px; 
       min-height: 100vh; 
     }
 
     .container { 
       max-width: 700px; 
       margin: 0 auto; 
-      padding: 0 15px; 
+      padding: 0; 
     }
 
     header { 
       background: linear-gradient(to right, #2a3990, #2bbfb1); 
       color: #fff; 
-      padding: 25px 0; 
+      padding: 25px 15px; 
       text-align: center; 
       border-radius: 10px 10px 0 0; 
       margin-bottom: 5px; 
@@ -132,8 +132,9 @@
     fieldset { 
       border: 1px solid #e0e0e0; 
       border-radius: 10px; 
-      padding: 20px; 
+      padding: 15px; 
       margin: 25px 0; 
+      overflow: hidden; 
     }
 
     legend { 
@@ -182,7 +183,8 @@
     .cal-grid { 
       display: grid; 
       grid-template-columns: repeat(7, 1fr); 
-      gap: 6px; 
+      gap: 4px; 
+      width: 100%;
     }
 
     .cal-dow { 
@@ -194,19 +196,21 @@
     }
 
     .cal-day { 
-      aspect-ratio: 1; 
+      min-height: 44px; 
+      padding: 4px 0;
       border: 1px solid #e0e0e0; 
       background: #f9f9f9; 
       border-radius: 8px; 
-      font-size: 16px; 
+      font-size: 15px; 
       font-family: inherit; 
       cursor: pointer; 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
       justify-content: center; 
-      gap: 2px; 
+      gap: 1px; 
       transition: all .2s; 
+      width: 100%;
     }
 
     .cal-day:hover:not(:disabled) { 
@@ -243,7 +247,7 @@
     }
 
     .cal-day.ocupado i { 
-      font-size: 11px; 
+      font-size: 10px; 
     }
 
     .cal-vazio { 
@@ -253,9 +257,9 @@
     .legenda { 
       display: flex; 
       flex-wrap: wrap; 
-      gap: 16px; 
+      gap: 12px; 
       margin-top: 14px; 
-      font-size: 14px; 
+      font-size: 13px; 
       color: #555; 
     }
 
@@ -356,11 +360,15 @@
       border-radius: 0 0 10px 10px; 
     }
 
-    @media (max-width: 768px) {
-      .form-card { padding: 25px 20px; }
-      header h1 { font-size: 24px; }
+    @media (max-width: 480px) {
+      body { padding: 10px 5px; }
+      .form-card { padding: 20px 12px; }
+      fieldset { padding: 10px 8px; }
+      header h1 { font-size: 22px; }
       .btn-submit { width: 100%; max-width: 300px; }
-      .cal-grid { gap: 4px; }
+      .cal-grid { gap: 2px; }
+      .cal-day { font-size: 13px; min-height: 40px; }
+      .cal-day.ocupado i { font-size: 9px; }
     }
   </style>
 </head>
@@ -373,7 +381,7 @@
 
   <div class="info-box">
     <h2><i class="fas fa-info-circle"></i> Informativo</h2>
-    <p>Sábados, Domingos eferiados não aceitam agendamento. Dias com <i class="fas fa-lock"></i> já foram reservados.</p>
+    <p>Sábados, Domingos e feriados não aceitam agendamento. Dias com <i class="fas fa-lock"></i> já foram reservados.</p>
   </div>
 
   <form id="atendimentoForm" class="form-card" novalidate>
@@ -418,12 +426,11 @@
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5meEXa77MkVTBKbYvz5z2y-DvPE7zdmYSWFXd69G69SyB0loteE1FB-QyRg8QSnQ-JA/exec";
 
-  // LISTA DE FERIADOS MANUAIS (Adicione aqui os dias no formato AAAA-MM-DD que deseja bloquear)
   const FERIADOS_MANUAIS = new Set([
-    "2026-04-21", // Exemplo: Tiradentes
-    "2026-05-01", // Exemplo: Dia do Trabalho
-    "2026-09-07", // Exemplo: Independência
-    "2026-12-25"  // Exemplo: Natal
+    "2026-04-21", 
+    "2026-05-01", 
+    "2026-09-07", 
+    "2026-12-25"  
   ]);
 
   const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
@@ -478,21 +485,21 @@
       const k = iso(d);
       const passado = d < hoje;
       const ocupado = ocupadas.has(k);
-      const ehFeriado = FERIADOS_MANUAIS.has(k); // Verificação instantânea do feriado
-      const ehDomingo = d.getDay() === 0;       // Verificação de domingo
-      const ehSabado = d.getDay() === 6;        // Verificação de sábado
+      const ehFeriado = FERIADOS_MANUAIS.has(k);
+      const ehDomingo = d.getDay() === 0;
+      const ehSabado = d.getDay() === 6;
       
       let cls = "cal-day";
       if (d.getTime() === hoje.getTime()) cls += " hoje";
       if (passado) cls += " passado";
-      else if (ehDomingo || ehSabado || ehFeriado || ocupado) cls += " ocupado"; // Incluído ehSabado aqui
+      else if (ehDomingo || ehSabado || ehFeriado || ocupado) cls += " ocupado";
       
       if (k === selecionada) cls += " selecionado";
       
-      const bloqueado = passado || ocupado || ehDomingo || ehSabado || ehFeriado; // Incluído ehSabado aqui
+      const bloqueado = passado || ocupado || ehDomingo || ehSabado || ehFeriado;
       
       let icone = "";
-      if (ehFeriado || ehDomingo || ehSabado) icone = '<i class="fas fa-ban"></i>'; // Incluído ehSabado aqui
+      if (ehFeriado || ehDomingo || ehSabado) icone = '<i class="fas fa-ban"></i>';
       else if (ocupado && !passado) icone = '<i class="fas fa-lock"></i>';
       
       html += `<button type="button" class="${cls}" data-dia="${k}" ${bloqueado ? "disabled" : ""}
@@ -529,11 +536,14 @@
       mostrarAviso("Não foi possível carregar as datas reservadas. Recarregue a página.");
     }
     
-    // Se a data selecionada caiu em um domingo, feriado ou foi ocupada, limpa a escolha
-    if (selecionada && (ocupadas.has(selecionada) || FERIADOS_MANUAIS.has(selecionada) || new Date(selecionada + 'T00:00:00').getDay() === 0)) {
-      selecionada = "";
-      document.getElementById("data").value = "";
-      document.getElementById("escolhida").textContent = "";
+    if (selecionada) {
+      const dSel = new Date(selecionada + 'T00:00:00');
+      const diaSem = dSel.getDay();
+      if (ocupadas.has(selecionada) || FERIADOS_MANUAIS.has(selecionada) || diaSem === 0 || diaSem === 6) {
+        selecionada = "";
+        document.getElementById("data").value = "";
+        document.getElementById("escolhida").textContent = "";
+      }
     }
     renderCalendario();
   }
@@ -564,7 +574,7 @@
         document.querySelector(".container").innerHTML = `
           <div class="form-card sucesso">
             <i class="fas fa-circle-check"></i>
-            <h2>Atendimento agendado!</h2>
+            ## Atendimento agendado!
             <p>Dia reservado: <strong>${br(selecionada)}</strong></p>
             <button class="btn-submit" onclick="location.reload()">Voltar</button>
           </div>`;
