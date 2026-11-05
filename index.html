@@ -373,7 +373,7 @@
 
   <div class="info-box">
     <h2><i class="fas fa-info-circle"></i> Informativo</h2>
-    <p>Domingos e feriados não aceitam agendamento. Dias com <i class="fas fa-lock"></i> já foram reservados.</p>
+    <p>Sábados, Domingos eferiados não aceitam agendamento. Dias com <i class="fas fa-lock"></i> já foram reservados.</p>
   </div>
 
   <form id="atendimentoForm" class="form-card" novalidate>
@@ -480,26 +480,27 @@
       const ocupado = ocupadas.has(k);
       const ehFeriado = FERIADOS_MANUAIS.has(k); // Verificação instantânea do feriado
       const ehDomingo = d.getDay() === 0;       // Verificação de domingo
+      const ehSabado = d.getDay() === 6;        // Verificação de sábado
       
       let cls = "cal-day";
       if (d.getTime() === hoje.getTime()) cls += " hoje";
       if (passado) cls += " passado";
-      else if (ehDomingo || ehFeriado || ocupado) cls += " ocupado";
+      else if (ehDomingo || ehSabado || ehFeriado || ocupado) cls += " ocupado"; // Incluído ehSabado aqui
       
       if (k === selecionada) cls += " selecionado";
       
-      const bloqueado = passado || ocupado || ehDomingo || ehFeriado;
+      const bloqueado = passado || ocupado || ehDomingo || ehSabado || ehFeriado; // Incluído ehSabado aqui
       
       let icone = "";
-      if (ehFeriado || ehDomingo) icone = '<i class="fas fa-ban"></i>';
+      if (ehFeriado || ehDomingo || ehSabado) icone = '<i class="fas fa-ban"></i>'; // Incluído ehSabado aqui
       else if (ocupado && !passado) icone = '<i class="fas fa-lock"></i>';
       
       html += `<button type="button" class="${cls}" data-dia="${k}" ${bloqueado ? "disabled" : ""}
-        aria-label="${dia} de ${MESES[mes]}${ehFeriado ? ", feriado" : (ehDomingo ? ", domingo" : (ocupado ? ", reservado" : ""))}">
+        aria-label="${dia} de ${MESES[mes]}${ehFeriado ? ", feriado" : (ehDomingo ? ", domingo" : (ehSabado ? ", sábado" : (ocupado ? ", reservado" : "")))}">
         ${dia}${icone}</button>`;
     }
     html += `</div>`;
-
+    
     const cal = document.getElementById("calendario");
     cal.innerHTML = html;
 
