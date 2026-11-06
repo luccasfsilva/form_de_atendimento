@@ -385,7 +385,7 @@
     <h2><i class="fas fa-info-circle"></i> Informativo</h2>
     <p>Comparecer ao laboratório com jejum de 08h00 a 10h00 — <strong>(não ultrapassar o tempo de jejum).</strong></p>
     <p>Horário para a realização do exame das 06h30 às 08h00 — <strong>(de Seg. a Sex).</strong></p>
-    <h4><strong>(Realizado durante a semana)</strong></h4>
+    <p><strong>(Realizado durante a semana)</strong></p>
   </div>
 
   <form id="atendimentoForm" class="form-card" novalidate>
@@ -570,7 +570,7 @@
       const r = await fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ nome, nascimento, data: br(selecionada) })
+        body: new URLSearchParams({ nome, nascimento, data: br(selecionada) }) // <--- Alterado para enviar no formato DD/MM/AAAA
       });
       const j = await r.json();
 
