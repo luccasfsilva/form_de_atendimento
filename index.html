@@ -54,15 +54,27 @@
     .info-box { 
       background: #e4f6f4; 
       border-left: 4px solid #2bbfb1; 
-      padding: 15px; 
+      padding: 16px; 
       margin: 20px 0; 
-      border-radius: 0 5px 5px 0; 
+      border-radius: 0 8px 8px 0; 
+      font-size: 15px;
     }
 
     .info-box h2 { 
       color: #2a3990; 
-      font-size: 20px; 
-      margin-bottom: 8px; 
+      font-size: 18px; 
+      margin-bottom: 10px; 
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-box p {
+      margin-bottom: 8px;
+    }
+
+    .info-box p:last-child {
+      margin-bottom: 0;
     }
 
     .form-card { 
@@ -350,6 +362,14 @@
       margin-bottom: 10px; 
     }
 
+    .sucesso h2 {
+      color: #2a3990;
+      font-size: 24px;
+      margin-bottom: 12px;
+      border-bottom: none !important;
+      padding-bottom: 0 !important;
+    }
+
     footer { 
       background: linear-gradient(to right, #2a3990, #2bbfb1); 
       color: #fff; 
@@ -369,6 +389,7 @@
       .cal-grid { gap: 2px; }
       .cal-day { font-size: 13px; min-height: 40px; }
       .cal-day.ocupado i { font-size: 9px; }
+      .info-box { padding: 12px; font-size: 14px; }
     }
   </style>
 </head>
@@ -381,8 +402,8 @@
 
   <div class="info-box">
     <h2><i class="fas fa-info-circle"></i> Informativo</h2>
-    <p>Comparecer ao laboratório com jejum de 8h a 10h &mdash; <strong>(não ultrapassar o tempo de jejum).</strong></p>
-    <p>Horário para a realização do exame das 06h30 às 8h. &mdash; <strong>(de Seg. a Sex).</strong></p>
+    <p>Comparecer ao laboratório com jejum de 8h a 10h — <strong>(não ultrapassar o tempo de jejum).</strong></p>
+    <p>Horário para a realização do exame das 06h30 às 8h. — <strong>(de Seg. a Sex).</strong></p>
     <p><strong>(Realizado durante a semana)</strong></p>
   </div>
 
@@ -576,7 +597,7 @@
         document.querySelector(".container").innerHTML = `
           <div class="form-card sucesso">
             <i class="fas fa-circle-check"></i>
-            ## Atendimento agendado!
+            <h2>Atendimento agendado!</h2>
             <p>Dia reservado: <strong>${br(selecionada)}</strong></p>
             <button class="btn-submit" onclick="location.reload()">Voltar</button>
           </div>`;
@@ -609,7 +630,7 @@
   function nascParaISO(txt) {
     const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(txt.trim());
     if (!m) return "";
-    const d = +m[1], mes = +m[2], a = +m[3];
+    const d = +m1, mes = +m[2], a = +m[3];
     const dt = new Date(a, mes - 1, d);
     if (dt.getFullYear() !== a || dt.getMonth() !== mes - 1 || dt.getDate() !== d) return "";
     if (a < 1900 || dt > hoje) return "";
